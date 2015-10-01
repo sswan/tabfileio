@@ -28,10 +28,23 @@ After being processed by `tabfileio.read_file()` the data is represented as
                                           [ 4. ,  0.4,  1.4]]))
 ```
 
+
+## Converting File Types
+
+There is also a small utility built-in to the module that can be invoked to
+quickly convert between tabular file types. As it is not very polished, it
+does not have its own command line executable and is invoked as a regular
+module:
+
+```
+$ python -m tabfileio input.xlsx output.txt.gz
+```
+
+
 ## Testing
 
 To test the installation, run:
 
 ```
-$ python -m tabfileio
+$ python -m tabfileio --test
 ```
