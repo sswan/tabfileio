@@ -44,11 +44,9 @@ def read_file(filename, columns=None, disp=1, sheet=None):
     given it looks for a sheet called 'mml' and if it can't find that
     it defaults to the first sheet.
     """
-    try:
-        ext = op.splitext(filename)[1].lower()
-    except AttributeError:
-        # filename could be an open stream
-        ext = ''
+
+    ext = op.splitext(filename)[1].lower()
+
     if ext in [".xls", ".xlsx"]:
         # Excel data
         head, data = read_excel(filename, columns=columns, sheet=sheet)
