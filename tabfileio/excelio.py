@@ -66,6 +66,13 @@ def read_excel(filename, sheetname=None, columns=None, disp=1):
         if openpyxl is None:
             raise Exception("Cannot read xlsx files because package"
                             " openpyxl is not found")
+        # Version checking
+        major, minor, micro = [int(_) for _ in openpyxl.__version__.split(".")]
+        if major < 2:
+            raise Exception("Cannot read xlsx files because openpyxl package"
+                            " version must be 2.0.0 or later. Found version"
+                            " {0}".format(openpyxl.__version__))
+
         wb = openpyxl.load_workbook(filename, use_iterators=True,
                                     data_only=True)
         sheet_names = wb.get_sheet_names()
@@ -123,7 +130,7 @@ def read_excel(filename, sheetname=None, columns=None, disp=1):
         for row in sh.iter_rows():
             tmprow = []
             for cell in row:
-                tmprow.append(cell.internal_value)
+                tmprow.append(cell.value)
             wholesheet.append(tmprow)
         head = wholesheet[0]
         data = wholesheet[1:]
