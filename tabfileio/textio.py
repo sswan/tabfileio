@@ -83,7 +83,7 @@ def read_text(filename, skiprows=0, comments='#', columns=None, disp=1):
     return head, data
 
 
-def write_text(filename, head, data, columns=None):
+def write_text(filename, head, data, columns=None, return_as_string=False):
 
     # This formatting is chosen because it can exactly represent a
     # double precision float. The width of 26 is chosen so as to give
@@ -105,19 +105,25 @@ def write_text(filename, head, data, columns=None):
     else:
         columns = list(range(0, len(head)))
 
-    # Check to see if we are looking at a gzipped text file
-    if filename.lower().endswith(".txt.gz"):
-        opener = gzip.open
-    else:
-        opener = open
+    # Compile everything that needs to be written
+    lines = []
+    lines.append("".join([strfmt(head[i]) for i in columns]) + "\n")
+    for row in data:
+        lines.append("".join([fltfmt(row[i]) for i in columns]) + "\n")
 
-    # Open the file in byte-mode and encode each line before writing
-    with opener(filename, 'wb') as F:
-        text = "".join([strfmt(head[i]) for i in columns]) + "\n"
-        F.write(text.encode("utf-8"))
-        for row in data:
-            text = "".join([fltfmt(row[i]) for i in columns]) + "\n"
-            F.write(text.encode("utf-8"))
+    if return_as_string:
+        return "".join(lines)
+    else:
+        # Check to see if we are looking at a gzipped text file
+        if filename.lower().endswith(".txt.gz"):
+            opener = gzip.open
+        else:
+            opener = open
+
+        # Open the file in byte-mode and encode each line before writing
+        with opener(filename, 'wb') as F:
+            for line in lines:
+                F.write(line.encode("utf-8"))
 
 
 if __name__ == '__main__':

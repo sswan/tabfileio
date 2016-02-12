@@ -11,6 +11,7 @@ All of the functions are available through the read_file() and
 write_file() functions.
 
 Changelog:
+160212 - M. Scot Swan - Included the format_as_string() method
 160212 - M. Scot Swan - Included the concatenate() method
 150930 - M. Scot Swan - now works in python3 as well as python2
 """
@@ -129,3 +130,6 @@ def concatenate(head1, data1, head2, data2):
     out_data = np.concatenate((np.array(data1), np.array(data2)), axis=1)
 
     return out_head, out_data
+
+def format_as_string(head, data):
+    return write_text(None, head, data, return_as_string=True)
