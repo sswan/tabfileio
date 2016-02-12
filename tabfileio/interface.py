@@ -11,6 +11,7 @@ All of the functions are available through the read_file() and
 write_file() functions.
 
 Changelog:
+160212 - M. Scot Swan - Included the concatenate() method
 150930 - M. Scot Swan - now works in python3 as well as python2
 """
 
@@ -116,3 +117,15 @@ def write_file(filename, head, data, columns=None, sheetname=None):
 def transform(input_f, output_f, columns=None, sheetname=None):
     head, data = read_file(input_f, sheetname=sheetname)
     write_file(output_f, head, data, columns=columns, sheetname=sheetname)
+
+
+def concatenate(head1, data1, head2, data2):
+    """ Appends head2 and data2 to head1 and data1 """
+
+    if len(data1) != len(data2):
+        raise Exception("Cannot concatenate due to row-number mismatch")
+
+    out_head = list(head1) + list(head2)
+    out_data = np.concatenate((np.array(data1), np.array(data2)), axis=1)
+
+    return out_head, out_data

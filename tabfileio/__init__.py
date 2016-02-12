@@ -11,6 +11,6 @@ write_file(), and transform() functions. Example usages are:
 
 For more information, see the functions in tabfileio.interface.
 """
-from .interface import read_file, write_file, transform
+from .interface import read_file, write_file, transform, concatenate
 
-__version__ = "0.1.5"
+__version__ = "0.1.6"
