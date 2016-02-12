@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='tabfileio',
-      version='0.1.6',
+      version='0.1.7',
       description='Tabular file input/output in multiple formats',
       long_description=('This package is used to read and write numerical'
                         ' tabular data. It is made for handling data in'
@@ -28,5 +28,5 @@ setup(name='tabfileio',
       author_email='scot.swan@gmail.com',
       license='MIT',
       packages=['tabfileio',],
-      install_requires=['numpy', 'json', 'pickle', 'xlrd', 'xlwt', 'openpyxl'],
+      install_requires=['numpy', 'xlrd', 'xlwt', 'openpyxl'],
       zip_safe=False)
