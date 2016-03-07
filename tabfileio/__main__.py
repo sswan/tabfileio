@@ -17,7 +17,7 @@ def test():
 
     print("\n{0:=^80s}\n".format(" FILEIO DIAGNOSTIC "))
 
-    type_coverage = ["txt", "txt.gz", "pkl", "xls", "xlsx", "json"]
+    type_coverage = ["txt", "txt.gz", "pkl", "xls", "xlsx", "json", "hdf5"]
 
     # write file in format A, read file in format A, compare.
     for ext in type_coverage:

@@ -22,6 +22,7 @@ from .textio import read_text, write_text
 from .excelio import read_excel, write_excel
 from .pickleio import read_pickle, write_pickle
 from .jsonio import read_json, write_json
+from .hdf5 import read_hdf5, write_hdf5
 
 
 def tolist(obj):
@@ -77,6 +78,9 @@ def read_file(filename, columns=None, disp=1, sheetname=None):
     elif ext == ".json":
         # JSON data
         head, data = read_json(filename, columns=columns)
+    elif ext in [".hdf5", ".h5"]:
+        # HDF5 data
+        head, data = read_hdf5(filename, columns=columns)
     else:
         # Try text reader and cross fingers
         head, data = read_text(filename, columns=columns)
@@ -109,6 +113,9 @@ def write_file(filename, head, data, columns=None, sheetname=None):
     elif ext == ".json":
         # JSON data
         write_json(filename, head, data, columns=columns)
+    elif ext in [".hdf5", ".h5"]:
+        # HDF5 data
+        write_hdf5(filename, head, data, columns=columns)
     else:
         # Try text reader and cross fingers
         write_text(filename, head, data, columns=columns)

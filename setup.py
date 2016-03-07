@@ -1,13 +1,13 @@
 from setuptools import setup
 
 setup(name='tabfileio',
-      version='0.1.8',
+      version='0.1.9',
       description='Tabular file input/output in multiple formats',
       long_description=('This package is used to read and write numerical'
                         ' tabular data. It is made for handling data in'
                         ' columns with a header (a text identifier). Supported'
                         ' formats are text, zipped text, excel (xls and xlsx),'
-                        ' python pickle, and json.'),
+                        ' python pickle, json, and HDF5.'),
       classifiers=[  # Classifier list:  https://pypi.python.org/pypi?:action=list_classifiers
                    "Development Status :: 3 - Alpha",
                    "Environment :: Console",
@@ -28,5 +28,5 @@ setup(name='tabfileio',
       author_email='scot.swan@gmail.com',
       license='MIT',
       packages=['tabfileio',],
-      install_requires=['numpy', 'xlrd', 'xlwt', 'openpyxl'],
+      install_requires=['numpy', 'xlrd', 'xlwt', 'openpyxl', 'h5py'],
       zip_safe=False)
