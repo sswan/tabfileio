@@ -127,16 +127,5 @@ def transform(input_f, output_f, columns=None, sheetname=None):
     write_file(output_f, head, data, columns=columns, sheetname=sheetname)
 
 
-def concatenate(head1, data1, head2, data2):
-    """ Appends head2 and data2 to head1 and data1 """
-
-    if len(data1) != len(data2):
-        raise Exception("Cannot concatenate due to row-number mismatch")
-
-    out_head = list(head1) + list(head2)
-    out_data = np.concatenate((np.array(data1), np.array(data2)), axis=1)
-
-    return out_head, out_data
-
 def format_as_string(head, data):
     return write_text(None, head, data, return_as_string=True)
