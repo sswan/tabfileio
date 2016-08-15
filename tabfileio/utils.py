@@ -27,7 +27,7 @@ def intersecting_columns_are_close(*, head1, data1, head2, data2,
          raise Exception("Cannot compare the data files because no two "
                          "columns share a header")
 
-     if data1.shape[0] != data2.shape[0]:
+     if np.array(data1).shape[0] != np.array(data2).shape[0]:
          raise Exception("Cannot compare exactly because data shapes are "
                          "different (data1.shape[0]={0}, data2[0].shape={1})"
                          .format(data1.shape[0], data2.shape[0]))
