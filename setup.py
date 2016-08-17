@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='tabfileio',
-      version='0.2.1',
+      version='0.2.3',
       description='Tabular file input/output in multiple formats',
       long_description=('This package is used to read and write numerical'
                         ' tabular data. It is made for handling data in'

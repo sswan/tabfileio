@@ -41,3 +41,36 @@ def intersecting_columns_are_close(*, head1, data1, head2, data2,
                  return False
 
      return True
+
+def fpe_check(*, head, data):
+
+    data_isfinite = np.isfinite(data)
+    if np.all(data_isfinite):
+        # All values are finite (not -inf, nan, +inf)
+        return
+
+    # 123456789012345
+    #  1234 (100.00%)
+
+    N = len(data)
+    txtfmt = "{0:>20s}{1:>18s}{2:>18s}{3:>18s}"
+    fltfmt = ("{0:>20s}{1:>9d} ({2:> 5.1f}%)"
+                    + "{3:>9d} ({4:> 5.1f}%)"
+                    + "{5:>9d} ({6:> 5.1f}%)")
+
+    print("!!!!! FOUND FPE")
+    print(txtfmt.format("Column Name", "-INF", "+INF", "NAN"))
+    for idx, colname in enumerate(head):
+        if np.all(data_isfinite[:, idx]):
+            continue
+
+        Nneginf = np.sum(np.isneginf(data[:, idx]))
+        Nposinf = np.sum(np.isposinf(data[:, idx]))
+        Nnan    = np.sum(np.isnan(data[:, idx]))
+
+        pcnt_neginf = Nneginf / N * 100.
+        pcnt_posinf = Nposinf / N * 100.
+        pcnt_nan    =    Nnan / N * 100.
+        print(fltfmt.format(colname, Nneginf, pcnt_neginf,
+                                     Nposinf, pcnt_posinf,
+                                     Nnan,    pcnt_nan))
