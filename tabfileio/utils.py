@@ -18,7 +18,8 @@ def concatenate(head1, data1, head2, data2):
 
 
 def intersecting_columns_are_close(*, head1, data1, head2, data2,
-                                      atol=1.0e-13, rtol=1.0e-13):
+                                      atol=1.0e-13, rtol=1.0e-13,
+                                      chatty=False):
 
      # Find shared headers and preserve head_1's ordering
      head = sorted(set(head1) & set(head2), key=head1.index)
@@ -32,15 +33,21 @@ def intersecting_columns_are_close(*, head1, data1, head2, data2,
                          "different (data1.shape[0]={0}, data2[0].shape={1})"
                          .format(data1.shape[0], data2.shape[0]))
 
+     haspassed = True
      for idx in range(len(data1)):
          for key in head:
              val1 = data1[idx, head1.index(key)]
              val2 = data2[idx, head2.index(key)]
              if (not np.isclose(val1, val2, atol=atol, rtol=rtol) or
                  not np.isclose(val2, val1, atol=atol, rtol=rtol)):
-                 return False
+                 if chatty:
+                     if haspassed:
+                         print("intersecting_columns_are_close() failure:")
+                     print("{0:>15s}{1:15.4e}{2:15.4e}{3:15.4e}{4:15.4e}".
+                           format(key, val1, val2, abs(val1-val2), abs(val1 - val2) / max(abs(val1), abs(val2))))
+                 haspassed = False
 
-     return True
+     return haspassed
 
 def fpe_check(*, head, data):
 
