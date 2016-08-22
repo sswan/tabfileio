@@ -51,12 +51,13 @@ def intersecting_columns_are_close(*, head1, data1, head2, data2,
 
      return haspassed
 
-def fpe_check(*, head, data):
+
+def is_fpe_free(*, head, data):
 
     data_isfinite = np.isfinite(data)
     if np.all(data_isfinite):
         # All values are finite (not -inf, nan, +inf)
-        return
+        return True
 
     # 123456789012345
     #  1234 (100.00%)
@@ -84,6 +85,7 @@ def fpe_check(*, head, data):
                                      Nposinf, pcnt_posinf,
                                      Nnan,    pcnt_nan))
 
+    return False
 
 
 def interpolate(*, data, N):
