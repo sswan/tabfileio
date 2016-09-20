@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def collate(head1, data1, head2, data2):
+def collate(*, head1, data1, head2, data2):
     """ Appends head2 and data2 to head1 and data1 """
 
     if len(set(head1) & set(head2)) > 0:
@@ -19,7 +19,7 @@ def collate(head1, data1, head2, data2):
 
 def intersecting_columns_are_close(*, head1, data1, head2, data2,
                                       atol=1.0e-13, rtol=1.0e-13,
-                                      chatty=False, exclude=[]):
+                                      chatty=False, exclude=[], requireSameHeaders=False):
 
      # Find shared headers and preserve head_1's ordering
      head = sorted(set(head1) & set(head2), key=head1.index)
@@ -27,6 +27,10 @@ def intersecting_columns_are_close(*, head1, data1, head2, data2,
      if len(head) == 0:
          raise Exception("Cannot compare the data files because no two "
                          "columns share a header")
+
+     if requireSameHeaders:
+         if len(head) != len(head1) or len(head) != len(head2):
+             return False  # are not close because they are not the same
 
      if np.array(data1).shape[0] != np.array(data2).shape[0]:
          raise Exception("Cannot compare exactly because data shapes are "
