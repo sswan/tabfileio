@@ -49,7 +49,8 @@ def intersecting_columns_are_close(*, head1, data1, head2, data2,
                  if chatty:
                      if haspassed:
                          print("intersecting_columns_are_close() failure:")
-                     print("{0:>15s}{1:15.4e}{2:15.4e}{3:15.4e}{4:15.4e}".
+                     
+                     print("{0: 3d}".format(idx) + "{0:>15s}{1:15.4e}{2:15.4e}{3:15.4e}{4:15.4e}".
                            format(key, val1, val2, abs(val1-val2), abs(val1 - val2) / max(abs(val1), abs(val2))))
                  haspassed = False
 
