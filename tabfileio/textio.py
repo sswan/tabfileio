@@ -11,7 +11,7 @@ def _split(string, comments, i=0):
                                                          if x.split()]
 
 
-def read_text(filename, skiprows=0, comments='#', columns=None, disp=1):
+def read_text(filename, skiprows=0, comments='#'):
 
     # Check to see if we are looking at a gzipped text file
     if filename.lower().endswith(".txt.gz"):
@@ -66,24 +66,10 @@ def read_text(filename, skiprows=0, comments='#', columns=None, disp=1):
 
     data = np.array(data)
 
-    # If specific columns are requested, filter the data
-    if columns is not None:
-        if any(isinstance(x, str) for x in columns):
-            h = [s.lower() for s in head]
-            for (i, item) in enumerate(columns):
-                if isinstance(item, str):
-                    columns[i] = h.index(item.lower())
-
-        if head is not None:
-            head = [head[i] for i in columns]
-        data = data[:, columns]
-
-    if not disp:
-        return data
     return head, data
 
 
-def write_text(filename, head, data, columns=None, return_as_string=False):
+def write_text(filename, head, data, return_as_string=False):
 
     # This formatting is chosen because it can exactly represent a
     # double precision float. The width of 26 is chosen so as to give
@@ -94,22 +80,11 @@ def write_text(filename, head, data, columns=None, return_as_string=False):
     def strfmt(x):
         return "{0:>26s}".format(x)
 
-    #
-    # If specific columns are requested, filter the data
-    if columns is not None:
-        if any(isinstance(x, str) for x in columns):
-            h = [s.lower() for s in head]
-            for (i, item) in enumerate(columns):
-                if isinstance(item, str):
-                    columns[i] = h.index(item.lower())
-    else:
-        columns = list(range(0, len(head)))
-
     # Compile everything that needs to be written
     lines = []
-    lines.append("".join([strfmt(head[i]) for i in columns]) + "\n")
+    lines.append("".join([strfmt(_) for _ in head]) + "\n")
     for row in data:
-        lines.append("".join([fltfmt(row[i]) for i in columns]) + "\n")
+        lines.append("".join([fltfmt(_) for _ in row]) + "\n")
 
     if return_as_string:
         return "".join(lines)

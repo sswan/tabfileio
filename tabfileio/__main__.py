@@ -17,7 +17,8 @@ def test():
 
     print("\n{0:=^80s}\n".format(" FILEIO DIAGNOSTIC "))
 
-    type_coverage = ["txt", "txt.gz", "pkl", "xls", "xlsx", "json", "hdf5"]
+    type_coverage = ["txt", "txt.gz", "pkl", "xls", "xlsx", "json",
+                     "hdf5", "csv"]
 
     # write file in format A, read file in format A, compare.
     for ext in type_coverage:
@@ -35,6 +36,7 @@ def test():
         os.remove(filename)
         print("Removed {0}".format(filename))
 
+print("Stuff")
 args = sys.argv[1:]
 if "-h" in args or "--help" in args:
     print("Use '--test' to perform tests.")

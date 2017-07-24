@@ -23,6 +23,7 @@ from .excelio import read_excel, write_excel
 from .pickleio import read_pickle, write_pickle
 from .jsonio import read_json, write_json
 from .hdf5 import read_hdf5, write_hdf5
+from .csvio import read_csv, write_csv
 
 
 def tolist(obj):
@@ -37,6 +38,31 @@ def tolist(obj):
     except (TypeError, ValueError):
         # explicitly convert to list
         return [x for x in obj]
+
+
+def filter_columns(head, data, columns):
+
+    # Create a temporary place for the filtered columns
+    tmpdata = np.zeros((len(data), len(columns)))
+
+    for idx, colname in enumerate(columns):
+ 
+        if isinstance(colname, int):
+            # 'colname' is a column index
+            if colname >= len(head):
+                raise Exception("Requested column index out of range: "
+                                + str(colname))
+            colidx = colname
+        elif isinstance(colname, str):
+            # 'colname' is a string of the column name
+            if colname not in head:
+                raise Exception("Requested column not found: " + colname)
+            colidx = head.index(colname)
+
+        tmpdata[:, idx] = data[:, colidx]
+
+    # Overwrite the 'whole' data with the filtered data
+    return columns, tmpdata
 
 
 def read_file(filename, columns=None, disp=1, sheetname=None):
@@ -71,19 +97,26 @@ def read_file(filename, columns=None, disp=1, sheetname=None):
 
     if ext in [".xls", ".xlsx"]:
         # Excel data
-        head, data = read_excel(filename, columns=columns, sheetname=sheetname)
+        head, data = read_excel(filename, sheetname=sheetname)
     elif ext == ".pkl":
         # Pickle data
-        head, data = read_pickle(filename, columns=columns)
+        head, data = read_pickle(filename)
     elif ext == ".json":
         # JSON data
-        head, data = read_json(filename, columns=columns)
+        head, data = read_json(filename)
     elif ext in [".hdf5", ".h5"]:
         # HDF5 data
-        head, data = read_hdf5(filename, columns=columns)
+        head, data = read_hdf5(filename)
+    elif ext == ".csv":
+        # CSV data
+        head, data = read_csv(filename)
     else:
         # Try text reader and cross fingers
-        head, data = read_text(filename, columns=columns)
+        head, data = read_text(filename)
+
+    # Filter columns, if requested
+    if columns is not None:
+        head, data = filter_columns(head, data, columns)
 
     data = np.array([[float(_) if _ is not None else 0.0 for _ in row]
                                                      for row in data])
@@ -102,24 +135,32 @@ def write_file(filename, head, data, columns=None, sheetname=None):
     The 'sheet' keyword instructs the excel writers to use that string
     as the sheet name instead of the default "mml"
     """
+
+    # Filter columns, if requested
+    if columns is not None:
+        head, data = filter_columns(head, data, columns)
+
     ext = op.splitext(filename)[1].lower()
+
     if ext in [".xls", ".xlsx"]:
         # Excel data
-        write_excel(filename, head, data, columns=columns, sheetname=sheetname)
+        write_excel(filename, head, data, sheetname=sheetname)
         pass
     elif ext == ".pkl":
         # Pickle data
-        write_pickle(filename, head, data, columns=columns)
+        write_pickle(filename, head, data)
     elif ext == ".json":
         # JSON data
-        write_json(filename, head, data, columns=columns)
+        write_json(filename, head, data)
     elif ext in [".hdf5", ".h5"]:
         # HDF5 data
-        write_hdf5(filename, head, data, columns=columns)
+        write_hdf5(filename, head, data)
+    elif ext == ".csv":
+        # CSV data
+        write_csv(filename, head, data)
     else:
         # Try text reader and cross fingers
-        write_text(filename, head, data, columns=columns)
-        pass
+        write_text(filename, head, data)
 
 
 def transform(input_f, output_f, columns=None, sheetname=None):

@@ -20,7 +20,7 @@ except ImportError:
     openpyxl = None
 
 
-def read_excel(filename, sheetname=None, columns=None, disp=1):
+def read_excel(filename, sheetname=None):
     '''
     Takes in a spreadsheet of the form:
 
@@ -73,7 +73,7 @@ def read_excel(filename, sheetname=None, columns=None, disp=1):
                             " version must be 2.0.0 or later. Found version"
                             " {0}".format(openpyxl.__version__))
 
-        wb = openpyxl.load_workbook(filename, use_iterators=True,
+        wb = openpyxl.load_workbook(filename, read_only=True,
                                     data_only=True)
         sheet_names = wb.get_sheet_names()
 
@@ -137,24 +137,10 @@ def read_excel(filename, sheetname=None, columns=None, disp=1):
 
     data = np.array(data)
 
-    # If specific columns are requested, filter the data
-    if columns is not None:
-        if any(isinstance(x, str) for x in columns):
-            h = [s.lower() for s in head]
-            for (i, item) in enumerate(columns):
-                if isinstance(item, str):
-                    columns[i] = h.index(item.lower())
-
-        if head is not None:
-            head = [head[i] for i in columns]
-        data = data[:, columns]
-
-    if not disp:
-        return data
     return head, data
 
 
-def write_excel(filename, head, data, columns=None, sheetname=None):
+def write_excel(filename, head, data, sheetname=None):
 
     filetype = "XLS" if filename.upper().endswith(".XLS") else "XLSX"
     sheetname = sheetname if sheetname else "Sheet1"
@@ -178,42 +164,31 @@ def write_excel(filename, head, data, columns=None, sheetname=None):
         sh = wb.get_active_sheet()
         sh.title = sheetname
 
-    # If specific columns are requested, prepare the columns index
-    if columns is not None:
-        if any(isinstance(x, str) for x in columns):
-            h = [s.lower() for s in head]
-            for (i, item) in enumerate(columns):
-                if isinstance(item, str):
-                    columns[i] = h.index(item.lower())
-    else:
-        columns = list(range(0, len(head)))
-
     # Write to the worksheet
     if filetype == "XLS":
         # write the headers
-        for idx, i in enumerate(columns):
-            sh.write(0, idx, head[i])
+        for idx, _ in enumerate(head):
+            sh.write(0, idx, _)
         # write the data
         for rdx, row in enumerate(data):
-            for idx, i in enumerate(columns):
-                sh.write(rdx + 1, idx, row[i])
+            for idx, _ in enumerate(row):
+                sh.write(rdx + 1, idx, _)
         wb.save(filename)
     else:
         # write the headers
-        sh.append([head[i] for i in columns])
+        sh.append([_ for _ in head])
         # write the data
         for row in data:
-            sh.append([row[i] for i in columns])
+            sh.append([_ for _ in row])
         wb.save(filename=filename)
 
 
 if __name__ == '__main__':
-    cols = ["TIME", "STRESS", 1]
-
     print("===== loading xls")
-    xlshead, xlsdata = read_excel("io_test.xls", columns=cols)
+    xlshead, xlsdata = read_excel("io_test.xls")
+
     print("===== loading xlsx")
-    xlsxhead, xlsxdata = read_excel("io_test.xlsx", columns=cols)
+    xlsxhead, xlsxdata = read_excel("io_test.xlsx")
 
     print("===== HEADERS")
     print("xls headers: " + repr(xlshead))

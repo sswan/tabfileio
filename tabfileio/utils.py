@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def collate(*, head1, data1, head2, data2):
+def collate(head1, data1, head2, data2):
     """ Appends head2 and data2 to head1 and data1 """
 
     if len(set(head1) & set(head2)) > 0:
@@ -17,9 +17,9 @@ def collate(*, head1, data1, head2, data2):
     return out_head, out_data
 
 
-def intersecting_columns_are_close(*, head1, data1, head2, data2,
-                                      atol=1.0e-13, rtol=1.0e-13,
-                                      chatty=False, exclude=[], requireSameHeaders=False):
+def intersecting_columns_are_close(head1, data1, head2, data2,
+                                   atol=1.0e-13, rtol=1.0e-13,
+                                   chatty=False, exclude=[], requireSameHeaders=False):
 
      # Find shared headers and preserve head_1's ordering
      head = sorted(set(head1) & set(head2), key=head1.index)
@@ -57,7 +57,7 @@ def intersecting_columns_are_close(*, head1, data1, head2, data2,
      return haspassed
 
 
-def is_fpe_free(*, head, data):
+def is_fpe_free(head, data):
 
     data_isfinite = np.isfinite(data)
     if np.all(data_isfinite):
@@ -93,7 +93,7 @@ def is_fpe_free(*, head, data):
     return False
 
 
-def interpolate(*, data, N):
+def interpolate(data, N):
     """ interpolate()
 
     Given a data set 'data' with M+1 rows, it will interpolate
