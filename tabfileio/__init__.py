@@ -14,4 +14,4 @@ For more information, see the functions in tabfileio.interface.
 from .interface import (read_file, write_file, transform, format_as_string)
 from . import utils
 
-__version__ = "0.2.3"
+__version__ = "0.2.4"
