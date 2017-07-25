@@ -39,10 +39,6 @@ def test_basic_read_write(ext):
     print("Reading {0}".format(filename))
     head, data = tfio.read_file(filename)
 
-    if ext == 'hdf5':
-        os.remove(filename)
-        pytest.skip("HDF5 returns columns out of order")
-
     assert test_head == head
     assert np.allclose(test_data, data, atol=1.0e-12, rtol=1.0e-12)
 
