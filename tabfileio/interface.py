@@ -42,7 +42,8 @@ def tolist(obj):
 
 def filter_columns(head, data, columns):
 
-    # Create a temporary place for the filtered columns
+    # Create a temporary place for the filtered columns and headers
+    tmphead = []
     tmpdata = np.zeros((len(data), len(columns)))
 
     for idx, colname in enumerate(columns):
@@ -59,10 +60,11 @@ def filter_columns(head, data, columns):
                 raise Exception("Requested column not found: " + colname)
             colidx = head.index(colname)
 
+        tmphead.append(head[colidx])
         tmpdata[:, idx] = data[:, colidx]
 
     # Overwrite the 'whole' data with the filtered data
-    return columns, tmpdata
+    return tmphead, tmpdata
 
 
 def read_file(filename, columns=None, disp=1, sheetname=None):
